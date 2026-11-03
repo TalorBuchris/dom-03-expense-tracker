@@ -22,13 +22,17 @@
 let expenseArr = [
     // { id: 1, desc: "Pizza", amount: 42.5, category: "food" }
 ];
+let filterExpenseArr = [...expenseArr];
 
 // elements
 const form = document.querySelector('form')
+const tbody = document.querySelector('#rows');
+const filter = document.querySelector('#filter');
 
 // events
 form.addEventListener('submit', addExpense);
-
+tbody.addEventListener('click', deleteExpense);
+filter.addEventListener('change', filterExpense);
 
 
 // functions
@@ -40,12 +44,12 @@ function addExpense(event) {
     const formError = document.querySelector('#form-error');
 
     // check input
-    if (!inputs[0].value.trim()){
+    if (!inputs[0].value.trim()) {
         formError.textContent = 'Please add a description';
         formError.hidden = false;
         return;
     }
-    else if (inputs[1].value <= 0){
+    else if (inputs[1].value <= 0) {
         formError.textContent = 'The amount must be larger than 0';
         formError.hidden = false;
         return;
@@ -64,20 +68,19 @@ function addExpense(event) {
     inputs[1].value = "";
     inputs[0].focus();
 
-    render();
+    filterExpense();
 }
 
 // ציור הטבלה
 function render() {
-    let tbody = document.querySelector('#rows');
     let noRows = document.querySelector('#no-rows');
     tbody.replaceChildren();
 
-    if (expenseArr.length == 0)
+    if (filterExpenseArr.length == 0)
         noRows.hidden = false;
     else {
         noRows.hidden = true;
-        expenseArr.forEach((line) => {
+        filterExpenseArr.forEach((line) => {
             let tr = document.createElement('tr');
 
             let td = document.createElement('td');
@@ -106,4 +109,33 @@ function render() {
             tbody.appendChild(tr);
         })
     }
+}
+
+function deleteExpense(event) {
+    const btnDelete = event.target.closest('.delete');
+    let idDelete = btnDelete.dataset.id;
+    expenseArr = expenseArr.filter(line => line.id !== Number(idDelete));
+    filterExpense();
+}
+
+function calcTotal() {
+    const total = document.querySelector('#total');
+    sum = 0;
+    filterExpenseArr.forEach(x => sum += x.amount);
+    total.textContent = sum.toFixed(2);
+    render();
+}
+
+function filterExpense() {
+    let filerValue = filter.value;
+    switch (filerValue) {
+        case 'all':
+            filterExpenseArr = [...expenseArr];
+            break;
+
+        default:
+            filterExpenseArr = expenseArr.filter(item => item.category === filerValue)
+            break;
+    }
+    calcTotal();
 }
