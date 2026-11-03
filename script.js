@@ -98,6 +98,8 @@ function render() {
             td = document.createElement('td');
             td.textContent = line.amount.toFixed(2);
             tr.appendChild(td);
+            if (line.amount > 100)
+                tr.classList.add('big');
 
             td = document.createElement('td');
             btn = document.createElement('button');
