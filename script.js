@@ -39,17 +39,17 @@ function addExpense(event) {
     const select = form.querySelector('select');
     const formError = document.querySelector('#form-error');
 
-    // // check input
-    // if (!inputs[0].value.trim()){
-    //     formError.textContent = 'Please add a description';
-    //     formError.hidden = false;
-    //     return;
-    // }
-    // else if (inputs[1].value <= 0){
-    //     formError.textContent = 'The amount must be larger than 0';
-    //     formError.hidden = false;
-    //     return;
-    // }
+    // check input
+    if (!inputs[0].value.trim()){
+        formError.textContent = 'Please add a description';
+        formError.hidden = false;
+        return;
+    }
+    else if (inputs[1].value <= 0){
+        formError.textContent = 'The amount must be larger than 0';
+        formError.hidden = false;
+        return;
+    }
 
     let item = {
         id: expenseArr.length > 0 ? expenseArr[expenseArr.length - 1].id + 1 : 0,
