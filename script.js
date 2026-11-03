@@ -19,20 +19,21 @@
 
 // Step 7: rows with an amount above 100 get the class "big"
 
-let expenseArr = [
-    // { id: 1, desc: "Pizza", amount: 42.5, category: "food" }
-];
+let expenseArr = [];
 let filterExpenseArr = [...expenseArr];
+let isSort = false;
 
 // elements
 const form = document.querySelector('form')
 const tbody = document.querySelector('#rows');
 const filter = document.querySelector('#filter');
+const sortBtn = document.querySelector('#sort-btn');
 
 // events
 form.addEventListener('submit', addExpense);
 tbody.addEventListener('click', deleteExpense);
 filter.addEventListener('change', filterExpense);
+sortBtn.addEventListener('click', () => sortExpense(!isSort));
 
 
 // functions
@@ -137,5 +138,22 @@ function filterExpense() {
             filterExpenseArr = expenseArr.filter(item => item.category === filerValue)
             break;
     }
-    calcTotal();
+    if (isSort) // ממוין
+        sortExpense(isSort);
+    else
+        calcTotal();
+}
+
+function sortExpense(sort) {
+    isSort = sort;
+    if (isSort) //ממוין
+    {
+        sortBtn.textContent = 'Sort by amount: on'
+        filterExpenseArr = filterExpenseArr.toSorted((a, b) => b.amount - a.amount);
+        render();
+    }
+    else {
+        sortBtn.textContent = 'Sort by amount: off'
+        filterExpense();
+    }
 }
